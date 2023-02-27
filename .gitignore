@@ -1,0 +1,7 @@
+# Jupyter notebooks
+notebooks/data
+notebooks/cifar_net.pth
+.ipynb_checkpoints/
+
+# MacOS
+.DS_Store
