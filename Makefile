@@ -15,3 +15,6 @@ jupyter_install_env:
 
 jupyter_open_port_colab:
 	@jupyter notebook --NotebookApp.allow_origin='https://colab.research.google.com' --port=8888 --NotebookApp.port_retries=0
+
+dino_run:
+	@python ./notebooks/SeleniumHelper.py
