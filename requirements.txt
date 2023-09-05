@@ -5,3 +5,6 @@ pandas
 torch
 torchvision
 tqdm
+selenium
+jupyterlab
+notebook

@@ -5,3 +5,6 @@ notebooks/cifar_net.pth
 
 # MacOS
 .DS_Store
+
+# venv
+.venv
