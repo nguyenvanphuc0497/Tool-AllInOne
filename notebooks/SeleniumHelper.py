@@ -84,7 +84,7 @@ class GameDino:
 
         # Update config for dino
         self._driver.execute_script("Runner.config.ACCELERATION=0")
-        self._driver.execute_script("Runner.config.MAX_SPEED=9")
+        self._driver.execute_script("Runner.config.MAX_SPEED=100")
 
         self._driver.execute_script(init_script)
 
@@ -133,38 +133,6 @@ class GameDino:
 
     def end(self):
         self._driver.close()
-
-    def isObstacleNearby(self):
-
-        obstacle = self._driver.execute_script(
-            "return Runner.instance_.horizon.obstacles[0]")
-        speed = self.get_speed()
-
-        if obstacle is not None:
-            w = obstacle["width"]
-            x = obstacle["xPos"]  # measured from left of canvas
-            y = obstacle["yPos"]  # measured from top of canvas
-            yFromBottom = self.CANVAS_HEIGHT - \
-                y - obstacle["typeConfig"]["height"]
-            isObstacleNearby = x < 25 * speed - w / 2
-
-            print("isObstacleNearby"+str(isObstacleNearby))
-
-            if isObstacleNearby:
-                if yFromBottom > self.DINO_HEIGHT:
-                    # Pterodactyl going from above, do nothing
-                    print("do nothing")
-                elif y > self.CANVAS_HEIGHT / 2:
-                    # Jump
-                    print("Jump")
-                    self.press_up()
-                    # dispatchKey("keyup", KEY_CODE_ARROW_DOWN)
-                    # dispatchKey("keydown", KEY_CODE_SPACE_BAR)
-                else:
-                    # Duck
-                    print("Duck")
-                    self.press_up()
-                    # dispatchKey("keydown", KEY_CODE_ARROW_DOWN)
 
     def init_bot(self):
         self._driver.execute
