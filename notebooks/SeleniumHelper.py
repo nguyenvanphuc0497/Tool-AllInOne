@@ -106,7 +106,7 @@ class GameDino:
         # self._driver.find_element_by_tag_name("body").send_keys(Keys.ARROW_UP)
         self._driver.find_element(By.TAG_NAME, "body").send_keys(Keys.ARROW_UP)
 
-    def get_speed(self):
+    def get_current_speed(self):
         currentSpeed = self._driver.execute_script(
             "return Runner.instance_.currentSpeed")
         return float(currentSpeed)
@@ -135,17 +135,45 @@ class GameDino:
         self._driver.close()
 
     def init_bot(self):
-        self._driver.execute
         self._driver.execute_script(open('./notebooks/BotDino.js').read())
 
+    def get_distance_obstacles(self):
+        fist_of_dino = self._driver.execute_script(
+            "return Runner.instance_.tRex.config.WIDTH_DUCK"
+        )
+        x_pos_obstacles = self._driver.execute_script(
+            """
+                const obstacle = Runner.instance_.horizon.obstacles[0]
+                if(obstacle){
+                    return obstacle.xPos
+                }
+            """
+        )
 
-dinoPayer = GameDino()
-dinoPayer.init_bot()
-dinoPayer.resume()
+        if type(fist_of_dino) is int and type(x_pos_obstacles) is int:
+            return x_pos_obstacles - fist_of_dino
 
-while True:
-    time.sleep(1)
-    current_speed = dinoPayer.get_speed()
-    current_score = dinoPayer.get_score()
-    print(current_speed)
-    print(current_score)
+    def get_size_of_obstacle(self):
+        return self._driver.execute_script(
+            """
+                const obstacle = Runner.instance_.horizon.obstacles[0]
+                if (obstacle) {
+                    return obstacle.width
+                }
+            """
+        )
+
+
+if __name__ == "main":
+
+    dinoPayer = GameDino()
+    dinoPayer.init_bot()
+    dinoPayer.resume()
+
+    while True:
+        time.sleep(1)
+        # current_speed = dinoPayer.get_speed()
+        # current_score = dinoPayer.get_score()
+        # print(current_speed)
+        # print(current_score)
+        print(dinoPayer.get_distance_obstacles())

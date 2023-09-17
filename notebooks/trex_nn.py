@@ -82,6 +82,7 @@ def tRex_model(X, parameters):
 
 def from_model_to_action(value, threshold=0.6):
     if value > threshold:
+        print("JUMP_UP")
         return "JUMP_UP"
     return None
 

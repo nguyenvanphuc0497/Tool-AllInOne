@@ -19,6 +19,8 @@ setInterval(function () {
         const yFromBottom = CANVAS_HEIGHT - y - obstacle.typeConfig.height
         const isObstacleNearby = x < 25 * speed - w / 2
 
+        console.log("Distance: " + (obstacle.xPos - (Runner.instance_.tRex.config.START_X_POS + Runner.instance_.tRex.config.WIDTH)))
+
         if (isObstacleNearby) {
             if (yFromBottom > DINO_HEIGHT) {
                 // Pterodactyl going from above, do nothing
