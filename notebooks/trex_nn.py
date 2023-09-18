@@ -82,7 +82,6 @@ def tRex_model(X, parameters):
 
 def from_model_to_action(value, threshold=0.6):
     if value > threshold:
-        print("JUMP_UP")
         return "JUMP_UP"
     return None
 
@@ -90,8 +89,8 @@ def from_model_to_action(value, threshold=0.6):
 def wrap_model(X, parameters, n_x):
     X_adj = re_shape_X(X)
     action_value = tRex_model(X_adj, parameters).item()
-    # print(action_value)
-    from_model_to_action(action_value, threshold=0.6)
+    print(action_value)
+    return from_model_to_action(action_value, threshold=0.95)
 
 
 def test_help(X, parameters, n_x):

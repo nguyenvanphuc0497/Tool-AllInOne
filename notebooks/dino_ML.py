@@ -31,20 +31,30 @@ N_Y = 1  # kich thuoc output layer
 LANDSCAPE = False
 
 
-dinoHelper = GameDino()
-dinoHelper.init_bot()
-
-
-def play_game():
+def play_game(dinoPlayer, parameters_set):
+    # dinoPlayer.init_bot()
+    dinoPlayer.press_up()
 
     while True:
         time.sleep(0.1)
-        speed = dinoHelper.get_current_speed()
-        distance, size = dinoHelper.get_distance_obstacles(), dinoHelper.get_size_of_obstacle()
+        speed = dinoPlayer.get_current_speed()
+        distance, size = dinoPlayer.get_distance_obstacles(), dinoPlayer.get_size_of_obstacle()
         input_set = [distance, speed, size]
+        if dinoPlayer.get_crashed():
+            score = dinoPlayer.get_score()
+            print(f"Game over with score= {score}. Restart game")
+            return score
         if None not in input_set:
-            trex_nn.wrap_model(input_set, clever_params, N_X)
-        print(input_set)
+            action = trex_nn.wrap_model(input_set, parameters_set, N_X)
+            # print(input_set)
+            if action == "JUMP_UP":
+                dinoPlayer.press_up()
+
+        # print(input_set)
 
 
-play_game()
+if __name__ == "__main__":
+    while True:
+        time.sleep(5)
+        last_score = play_game(GameDino(), clever_params)
+        print(last_score)

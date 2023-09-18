@@ -76,14 +76,15 @@ class GameDino:
         # self._driver = webdriver.Chrome(executable_path = chrome_driver_path,chrome_options=chrome_options)
         self._driver = webdriver.Chrome(service=Service(
             ChromeDriverManager().install()), options=chrome_options)
-        self._driver.set_window_position(x=-10, y=0)
+        self._driver.set_window_position(x=10, y=0)
         try:
             self._driver.get(GAME_URL)
         except:
             print("continue with ")
 
         # Update config for dino
-        self._driver.execute_script("Runner.config.ACCELERATION=0")
+        # Tốc độ tăng nhân lên sau mỗi frame.
+        self._driver.execute_script("Runner.config.ACCELERATION=0.001")
         self._driver.execute_script("Runner.config.MAX_SPEED=100")
 
         self._driver.execute_script(init_script)
@@ -164,16 +165,15 @@ class GameDino:
         )
 
 
-if __name__ == "main":
+if __name__ == "__main__":
 
-    dinoPayer = GameDino()
-    dinoPayer.init_bot()
-    dinoPayer.resume()
+    dinoPlayer = GameDino()
+    dinoPlayer.init_bot()
+    dinoPlayer.press_up()
 
     while True:
         time.sleep(1)
-        # current_speed = dinoPayer.get_speed()
-        # current_score = dinoPayer.get_score()
-        # print(current_speed)
-        # print(current_score)
-        print(dinoPayer.get_distance_obstacles())
+        speed = dinoPlayer.get_current_speed()
+        distance, size = dinoPlayer.get_distance_obstacles(), dinoPlayer.get_size_of_obstacle()
+        input_set = [distance, speed, size]
+        print(input_set)
