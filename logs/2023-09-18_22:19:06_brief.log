@@ -1,0 +1,8 @@
+2023-09-18 22:19:06,206 : Start
+2023-09-18 22:19:06,206 INFO Start
+2023-09-18 22:19:06,206 INFO Start
+2023-09-18 22:19:09,213 INFO ====== WebDriver manager ======
+2023-09-18 22:19:09,391 INFO Get LATEST chromedriver version for google-chrome
+2023-09-18 22:19:09,391 INFO Get LATEST chromedriver version for google-chrome
+2023-09-18 22:19:09,392 INFO There is no [mac64] chromedriver "116.0.5845.187" for browser google-chrome "116.0.5845.187" in cache
+2023-09-18 22:19:09,396 INFO Get LATEST chromedriver version for google-chrome

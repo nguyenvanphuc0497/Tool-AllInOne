@@ -41,7 +41,7 @@ def play_game(dinoPlayer, parameters_set):
         distance, size = dinoPlayer.get_distance_obstacles(), dinoPlayer.get_size_of_obstacle()
         input_set = [distance, speed, size]
         if dinoPlayer.get_crashed():
-            score = dinoPlayer.get_score()
+            score = dinoPlayer.get_score()/50
             print(f"Game over with score= {score}. Restart game")
             return score
         if None not in input_set:

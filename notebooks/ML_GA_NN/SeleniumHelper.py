@@ -64,8 +64,6 @@ setInterval(function () {
 
 
 class GameDino:
-    KEY_CODE_SPACE_BAR = 32
-    KEY_CODE_ARROW_DOWN = 40
 
     def __init__(self, custom_config=True):
         chrome_options = Options()
@@ -80,7 +78,8 @@ class GameDino:
         try:
             self._driver.get(GAME_URL)
         except:
-            print("continue with ")
+            print("Continue open web offline with exception.")
+            pass
 
         # Update config for dino
         # Tốc độ tăng nhân lên sau mỗi frame.
@@ -88,11 +87,6 @@ class GameDino:
         self._driver.execute_script("Runner.config.MAX_SPEED=100")
 
         self._driver.execute_script(init_script)
-
-        self.CANVAS_HEIGHT = self._driver.execute_script(
-            "return Runner.instance_.dimensions.HEIGHT")
-        self.DINO_HEIGHT = self._driver.execute_script(
-            "return Runner.instance_.tRex.config.HEIGHT")
 
     def get_crashed(self):
         return self._driver.execute_script("return Runner.instance_.crashed")
@@ -105,11 +99,23 @@ class GameDino:
 
     def press_up(self):
         # self._driver.find_element_by_tag_name("body").send_keys(Keys.ARROW_UP)
-        self._driver.find_element(By.TAG_NAME, "body").send_keys(Keys.ARROW_UP)
+        # self._driver.find_element(By.TAG_NAME, "body").send_keys(Keys.ARROW_UP)
+        self._driver.execute_script(
+            """
+            document.dispatchEvent(new KeyboardEvent("keyup", {keyCode: 40}))
+            document.dispatchEvent(new KeyboardEvent("keydown", {keyCode: 32}))
+            """
+        )
+
+    def press_down(self):
+        # self._driver.find_element(By.TAG_NAME, "body").send_keys(Keys.ARROW_DOWN)
+        self._driver.execute_script(
+            """document.dispatchEvent(new KeyboardEvent("keydown", {keyCode: 40}))""")
 
     def get_current_speed(self):
         currentSpeed = self._driver.execute_script(
-            "return Runner.instance_.currentSpeed")
+            "return Runner.instance_.currentSpeed"
+        )
         return float(currentSpeed)
 
     def get_score(self):
@@ -153,6 +159,7 @@ class GameDino:
 
         if type(fist_of_dino) is int and type(x_pos_obstacles) is int:
             return x_pos_obstacles - fist_of_dino
+        return 0
 
     def get_size_of_obstacle(self):
         return self._driver.execute_script(
@@ -164,16 +171,78 @@ class GameDino:
             """
         )
 
+    def is_obstacle_nearby(self, thread_hold=80):
+        return 10 < self.get_distance_obstacles() < thread_hold
 
+    def cactus_or_duck(self):
+        return self._driver.execute_script(
+            """
+                const CANVAS_HEIGHT = Runner.instance_.dimensions.HEIGHT
+                const DINO_HEIGHT = Runner.instance_.tRex.config.HEIGHT
+
+                const obstacle = Runner.instance_.horizon.obstacles[0]
+                const speed = Runner.instance_.currentSpeed
+
+                if (obstacle) {
+                    const w = obstacle.width
+                    const x = obstacle.xPos // measured from left of canvas
+                    const y = obstacle.yPos // measured from top of canvas
+                    const yFromBottom = CANVAS_HEIGHT - y - obstacle.typeConfig.height
+                  
+                    if (yFromBottom > DINO_HEIGHT) {
+                        // Pterodactyl going from above, do nothing
+                    } else if (y > CANVAS_HEIGHT / 2) {
+                        // Jump
+                        return "cactus"
+                    } else {
+                        // Duck
+                        return "duck"
+                    }
+                }
+            """
+        )
+
+    def wrap_press_up(self):
+        self._driver.execute_script(
+            """
+                const KEY_CODE_SPACE_BAR = 32
+                const KEY_CODE_ARROW_DOWN = 40
+                const CANVAS_HEIGHT = Runner.instance_.dimensions.HEIGHT
+                const DINO_HEIGHT = Runner.instance_.tRex.config.HEIGHT
+
+                const obstacle = Runner.instance_.horizon.obstacles[0]
+                const speed = Runner.instance_.currentSpeed
+
+                if (obstacle) {
+                    const w = obstacle.width
+                    const x = obstacle.xPos // measured from left of canvas
+                    const y = obstacle.yPos // measured from top of canvas
+                    const yFromBottom = CANVAS_HEIGHT - y - obstacle.typeConfig.height
+                  
+                    if (yFromBottom > DINO_HEIGHT) {
+                        // Pterodactyl going from above, do nothing
+                    } else if (y > CANVAS_HEIGHT / 2) {
+                        // cactus
+                        document.dispatchEvent(new KeyboardEvent("keyup", {keyCode: KEY_CODE_ARROW_DOWN}))
+                        document.dispatchEvent(new KeyboardEvent("keydown", {keyCode: KEY_CODE_SPACE_BAR}))
+                    } else {
+                        // Duck
+                        document.dispatchEvent(new KeyboardEvent("keydown", {keyCode: KEY_CODE_ARROW_DOWN}))
+                    }
+                }
+            """
+        )
+
+
+CACTUS = "cactus"
+DUCK = "duck"
 if __name__ == "__main__":
 
     dinoPlayer = GameDino()
-    dinoPlayer.init_bot()
     dinoPlayer.press_up()
 
     while True:
-        time.sleep(1)
-        speed = dinoPlayer.get_current_speed()
-        distance, size = dinoPlayer.get_distance_obstacles(), dinoPlayer.get_size_of_obstacle()
-        input_set = [distance, speed, size]
-        print(input_set)
+        time.sleep(0.01)
+        if dinoPlayer.is_obstacle_nearby():
+            # dinoPlayer.press_up()
+            dinoPlayer.wrap_press_up()
