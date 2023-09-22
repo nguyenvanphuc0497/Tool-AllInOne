@@ -1,0 +1,18 @@
+2023-09-22 16:52:55,401 : Start
+2023-09-22 16:53:29,210 : -------------------------------------------------------
+2023-09-22 16:53:29,211 : Generation: 0
+2023-09-22 16:53:29,211 : a new day has come
+EST chromedriver version for google-chrome
+2023-09-22 16:52:58,586 INFO Get LATEST chromedriver version for google-chrome
+2023-09-22 16:52:58,586 INFO There is no [mac64] chromedriver "116.0.5845.187" for browser google-chrome "116.0.5845.187" in cache
+2023-09-22 16:52:58,590 INFO Get LATEST chromedriver version for google-chrome
+2023-09-22 16:52:58,940 INFO WebDriver version 116.0.5845.96 selected
+2023-09-22 16:52:58,942 INFO Modern chrome version https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/116.0.5845.96/mac-x64/chromedriver-mac-x64.zip
+2023-09-22 16:52:58,943 INFO About to download new driver from https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/116.0.5845.96/mac-x64/chromedriver-mac-x64.zip
+2023-09-22 16:52:59,385 INFO Driver downloading response is 200
+2023-09-22 16:53:27,069 INFO Get LATEST chromedriver version for google-chrome
+2023-09-22 16:53:27,200 INFO Driver has been saved in cache [/Users/PhucMacbookPro/.wdm/drivers/chromedriver/mac64/116.0.5845.187]
+2023-09-22 16:53:29,210 INFO -------------------------------------------------------
+2023-09-22 16:53:29,211 INFO -------------------------------------------------------
+2023-09-22 16:53:29,211 INFO Generation: 0
+2023-09-22 16:53:29,211 INFO a new day has come

@@ -1,3 +1,6 @@
+import trex_nn
+import time
+import SeleniumHelper
 import numpy as np
 
 ###### PART 1: PREPARE FIXED VARs AND FUNCTIONs ######
@@ -89,8 +92,8 @@ def from_model_to_action(value, threshold):
 def wrap_model(X, parameters, n_x):
     X_adj = re_shape_X(X)
     action_value = tRex_model(X_adj, parameters).item()
-    print(action_value)
-    return from_model_to_action(action_value, threshold=0.75)
+    # print(action_value)
+    return from_model_to_action(action_value, threshold=0.6)
 
 
 def test_help(X, parameters, n_x):
@@ -112,3 +115,38 @@ def test_help(X, parameters, n_x):
 ######      PART 3: RUN AND LOAD THE MODEL      ######
 ######################################################
 ######################################################
+
+
+def play_game(dinoPlayer: SeleniumHelper.GameDino, parameters_set):
+    dinoPlayer.press_up()
+    dinoPlayer.restart()
+    while True:
+        time.sleep(0.01)
+
+        speed = dinoPlayer.get_current_speed()
+        distance = dinoPlayer.get_distance_obstacles()
+        size = dinoPlayer.get_size_of_obstacle()
+
+        input_set = [distance, speed, size]
+
+        if trex_nn.wrap_model(input_set, parameters_set, len(input_set)) == 'JUMP_UP':
+            dinoPlayer.wrap_press_up()
+        if dinoPlayer.get_crashed():
+            return dinoPlayer.get_score()
+        
+
+
+if __name__ == "__main__":
+    clever_params = {
+        'b2': np.array([[0.27304736]]),
+        'W2': np.array([[0.91572382, -0.29862268,  0.30955728]]),
+        'W1': np.array([[-0.02062025,  0.00016742,  0.00381535],
+                        [0.00226537,  0.01325698,  0.02389935],
+                        [0.02300561,  0.01351209,  0.00588823]]),
+        'b1': np.array([[-0.73119972],
+                        [-0.05157346],
+                        [-0.00290758]])
+    }
+
+    puckPlayer = SeleniumHelper.GameDino()
+    play_game(puckPlayer, clever_params)

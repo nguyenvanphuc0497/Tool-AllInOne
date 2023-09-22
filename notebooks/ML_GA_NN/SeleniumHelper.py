@@ -67,14 +67,14 @@ class GameDino:
 
     def __init__(self, custom_config=True):
         chrome_options = Options()
-        chrome_options.add_argument("window-size=1920, 1080")
+        chrome_options.add_argument("window-size=1080, 720")
         chrome_options.add_argument("disable-infobars")
         chrome_options.add_argument("--mute-audio")
-        # chrome_options.add_argument("start-maximized")
-        # self._driver = webdriver.Chrome(executable_path = chrome_driver_path,chrome_options=chrome_options)
         self._driver = webdriver.Chrome(service=Service(
             ChromeDriverManager().install()), options=chrome_options)
-        self._driver.set_window_position(x=10, y=0)
+        self._driver.set_window_position(x=50, y=0)
+        self._driver.set_window_size(1080, 720)
+        # self._driver.set_network_conditions(offline=True)
         try:
             self._driver.get(GAME_URL)
         except:
@@ -85,7 +85,6 @@ class GameDino:
         # Tốc độ tăng nhân lên sau mỗi frame.
         self._driver.execute_script("Runner.config.ACCELERATION=0.001")
         self._driver.execute_script("Runner.config.MAX_SPEED=100")
-
         self._driver.execute_script(init_script)
 
     def get_crashed(self):
@@ -168,6 +167,7 @@ class GameDino:
                 if (obstacle) {
                     return obstacle.width
                 }
+                return 0
             """
         )
 

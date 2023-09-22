@@ -1,7 +1,6 @@
 from SeleniumHelper import GameDino
 import numpy as np
 import trex_nn
-import dino_ML
 import time
 import logging
 
@@ -165,9 +164,11 @@ def evolve():
         log1.info("a new day has come")
         score = []
         for trex in curr_gen:
-            count_cactus = dino_ML.play_game(
+            count_cactus = trex_nn.play_game(
                 dinoPlayer=dino_agent, parameters_set=trex)
             score.append(count_cactus)
+            print(f'{trex} is score: {count_cactus}')
+            time.sleep(1)
         log1.info(score)
         survivals, survival_inds = select_survivals(curr_gen, score)
         log1.info(survival_inds)
