@@ -1,6 +1,6 @@
 from SeleniumHelper import GameDino
 import numpy as np
-import trex_nn
+import notebooks.ML_GA_NN.dino_nn as dino_nn
 import time
 import logging
 
@@ -53,7 +53,7 @@ def cv_to_body(adn):
 
 
 def genesis(pop_size=POP_SIZE):
-    trex_clan = [trex_nn.initialize_parameters(
+    trex_clan = [dino_nn.initialize_parameters(
         N_X, N_H, N_Y) for i in range(POP_SIZE)]
     trex_clan = np.array(trex_clan)
     return trex_clan
@@ -164,7 +164,7 @@ def evolve():
         log1.info("a new day has come")
         score = []
         for trex in curr_gen:
-            count_cactus = trex_nn.play_game(
+            count_cactus = dino_nn.play_game(
                 dinoPlayer=dino_agent, parameters_set=trex)
             score.append(count_cactus)
             print(f'{trex} is score: {count_cactus}')

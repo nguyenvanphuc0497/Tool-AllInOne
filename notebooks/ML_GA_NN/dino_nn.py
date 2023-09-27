@@ -1,4 +1,4 @@
-import trex_nn
+import notebooks.ML_GA_NN.dino_nn as dino_nn
 import time
 import SeleniumHelper
 import numpy as np
@@ -6,10 +6,6 @@ import numpy as np
 ###### PART 1: PREPARE FIXED VARs AND FUNCTIONs ######
 ######################################################
 ######################################################
-
-
-def relu(array):
-    return np.maximum(array, 0.)
 
 
 def sigmoid(z):
@@ -89,14 +85,14 @@ def from_model_to_action(value, threshold):
     return None
 
 
-def wrap_model(X, parameters, n_x):
+def wrap_model(X, parameters):
     X_adj = re_shape_X(X)
     action_value = tRex_model(X_adj, parameters).item()
     # print(action_value)
     return from_model_to_action(action_value, threshold=0.6)
 
 
-def test_help(X, parameters, n_x):
+def test_help(X, parameters):
     X_adj = re_shape_X(X)
     W1 = parameters['W1']
     b1 = parameters['b1']
@@ -129,11 +125,10 @@ def play_game(dinoPlayer: SeleniumHelper.GameDino, parameters_set):
 
         input_set = [distance, speed, size]
 
-        if trex_nn.wrap_model(input_set, parameters_set, len(input_set)) == 'JUMP_UP':
+        if dino_nn.wrap_model(input_set, parameters_set) == 'JUMP_UP':
             dinoPlayer.wrap_press_up()
         if dinoPlayer.get_crashed():
             return dinoPlayer.get_score()
-        
 
 
 if __name__ == "__main__":
