@@ -1,4 +1,3 @@
-import notebooks.ML_GA_NN.dino_nn as dino_nn
 import time
 import SeleniumHelper
 import numpy as np
@@ -125,7 +124,7 @@ def play_game(dinoPlayer: SeleniumHelper.GameDino, parameters_set):
 
         input_set = [distance, speed, size]
 
-        if dino_nn.wrap_model(input_set, parameters_set) == 'JUMP_UP':
+        if wrap_model(input_set, parameters_set) == 'JUMP_UP':
             dinoPlayer.wrap_press_up()
         if dinoPlayer.get_crashed():
             return dinoPlayer.get_score()

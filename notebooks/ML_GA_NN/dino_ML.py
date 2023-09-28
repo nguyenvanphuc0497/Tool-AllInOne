@@ -1,6 +1,6 @@
 from SeleniumHelper import GameDino
 import numpy as np
-import notebooks.ML_GA_NN.dino_nn as dino_nn
+import dino_nn
 import time
 import logging
 
@@ -8,8 +8,6 @@ import logging
 ###### PART 1: PREPARE FIXED VARs AND FUNCTIONs ######
 ######################################################
 ######################################################
-
-URL = "http://www.trex-game.skipser.com/"
 
 N_X = 3
 N_H = 3
@@ -42,7 +40,6 @@ def cv_to_sequence(body):
 def cv_to_body(adn):
     """
     cv ADN aka sequence to body aka parameters_set
-    tam thoi hard code 1 ty chu ko chac chet luon =))
     """
     params = {}
     params["W1"] = np.reshape(adn[:9], (3, 3))
@@ -53,8 +50,11 @@ def cv_to_body(adn):
 
 
 def genesis(pop_size=POP_SIZE):
+    """
+    1. Initial population
+    """
     trex_clan = [dino_nn.initialize_parameters(
-        N_X, N_H, N_Y) for i in range(POP_SIZE)]
+        N_X, N_H, N_Y) for i in range(pop_size)]
     trex_clan = np.array(trex_clan)
     return trex_clan
 
@@ -164,10 +164,10 @@ def evolve():
         log1.info("a new day has come")
         score = []
         for trex in curr_gen:
-            count_cactus = dino_nn.play_game(
+            count_score = dino_nn.play_game(
                 dinoPlayer=dino_agent, parameters_set=trex)
-            score.append(count_cactus)
-            print(f'{trex} is score: {count_cactus}')
+            score.append(count_score)
+            print(f'{trex} end game with score: {count_score}')
             time.sleep(1)
         log1.info(score)
         survivals, survival_inds = select_survivals(curr_gen, score)
