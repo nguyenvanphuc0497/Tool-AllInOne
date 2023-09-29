@@ -25,6 +25,9 @@ def cv_to_sequence(body):
     """
     cv body aka parameters_set to ADN aka sequence
     """
+
+    print(f"body= {body}")
+
     sequence = []
     for key in BODY_KEYS:
         sequence.append(body[key])
@@ -34,6 +37,8 @@ def cv_to_sequence(body):
     sequence_str = sequence_str.replace("(", "").replace(")", "")
     sequence_str = sequence_str.replace(" ", "")
     sequence_adj = list(map(float, sequence_str.split(",")))
+    print(f"sequence= {sequence}")
+
     return sequence_adj
 
 
@@ -41,11 +46,19 @@ def cv_to_body(adn):
     """
     cv ADN aka sequence to body aka parameters_set
     """
+
+    print(f"adn= {adn}")
+
+
     params = {}
     params["W1"] = np.reshape(adn[:9], (3, 3))
     params["W2"] = np.reshape(adn[9:12], (1, 3))
     params["b1"] = np.reshape(adn[12:15], (3, 1))
     params["b2"] = np.reshape(adn[15], (1, 1))
+
+    print(f"params= {params}")
+
+
     return params
 
 
@@ -139,6 +152,8 @@ def gen_to_max_size(survivals, pop_size=POP_SIZE):
 
 
 def select_survivals(tribal, score):
+    print(f"tribal= {tribal}")
+    print(f"score= {score}")
     fitness_scores = np.array(score)
     survival_inds = (-fitness_scores).argsort()[:4]
     return tribal[survival_inds], survival_inds
@@ -171,6 +186,8 @@ def evolve():
             time.sleep(1)
         log1.info(score)
         survivals, survival_inds = select_survivals(curr_gen, score)
+        print(f"survivals= { survivals}")
+        print(f"survival_inds= { survival_inds}")
         log1.info(survival_inds)
         log1.info("genarating next gen")
         curr_gen = gen_to_max_size(survivals, POP_SIZE)
